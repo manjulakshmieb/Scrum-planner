@@ -1,0 +1,31 @@
+<div class="container-fluid">
+   <div class="" *ngIf="sprintListArray.length!=0">
+    <div class="col-12 row p-3" *ngFor="let c of sprintListArray;let i=index">
+        <h3 class="d-flex justify-content-center">Sprint {{c.slNo}}</h3>
+        <div class="d-flex justify-content-center flex-wrap mx-4 mt-2">
+            <div class="card p-0 m-3" style="width: 16rem;" *ngFor="let k of c.stories">
+                <div class="card-body">
+                    <div class="d-flex justify-content-end">
+                        <span class="fz-12">
+                            {{k.storypoints}}
+                        </span>
+                    </div>
+                  <span class="fz-16 mb-2 fw-500">{{k.storyname}}</span>
+                  <p class="card-text fz-12 mt-2">
+                    {{k.storyDes}}
+                  </p>
+                </div>
+            </div>
+        </div>    
+    </div>
+   </div>
+   <div class="d-flex flex-column h-100" *ngIf="sprintListArray.length==0">
+    <h3 class="d-flex justify-content-center w-100 py-3">Sprint List</h3>
+    <div class="py-5 d-flex justify-content-center aligh-items-center"> 
+        <img src="../../assets/images/nodata.png" alt="" height="200" width="200">      
+    </div>
+    <div class="d-flex justify-content-center">
+        <span>create new data <a  class="fw-bold" routerLink="/sprint">click here</a></span>
+    </div>
+   </div>
+</div>

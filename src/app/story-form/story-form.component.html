@@ -1,0 +1,23 @@
+<div class="container-fluid">
+    <div class="col-12 row m-0 p-5 d-flex justify-content-center align-items-center">
+        <div class="col-6">
+            <div class="d-flex justify-content-center mb-3">
+                <label class="label">Add Stroy Form</label>
+            </div>
+            <form (ngSubmit)="submitForm()" [formGroup]="storyFormData">
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="storyname"  placeholder="story name"  required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" (input)="onInputChange($event)" class="form-control" formControlName="storypoints" placeholder="story points"  required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="storyDes" placeholder="story description"  required />
+                </div>
+                <div class="">
+                    <button class="btn button-color w-100" type="submit">Add story</button>
+                </div>
+              </form>
+        </div> 
+    </div>
+</div>

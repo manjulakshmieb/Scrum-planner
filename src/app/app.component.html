@@ -1,0 +1,9 @@
+<div class="col-12 row m-0 p-0 ">
+    <nav class="navbar navbar-expand-lg navbar-light px-3">
+        <a class="navbar-brand" [ngClass]="{'active': isActive('/story')}" routerLink="/story" >Story Form</a>
+        <a class="navbar-brand" [ngClass]="{'active': isActive('/storylist')}" routerLink="/storylist" >Story List</a>
+        <a class="navbar-brand" [ngClass]="{'active': isActive('/sprint')}"routerLink="/sprint">Sprint Form</a>
+        <a class="navbar-brand" [ngClass]="{'active': isActive('/sprintlist')}"routerLink="/sprintlist">Sprint List</a>
+      </nav>
+</div>
+<router-outlet></router-outlet>

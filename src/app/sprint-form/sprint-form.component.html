@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="col-12 row m-0 p-5 d-flex justify-content-center align-items-center">
+        <div class="col-6">
+            <div class="d-flex justify-content-center mb-3">
+                <label class="label">Sprint Calculator</label>
+            </div>
+            <form (ngSubmit)="submitForm()" [formGroup]="formSubmitData">
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="sprintName" placeholder="Sprint name"  required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" (input)="onInputChange($event)" formControlName="sprintPoints" placeholder="Sprint points"  required />
+                </div>
+                <div class="">
+                    <button class="btn button-color w-100 mb-2" type="submit">Generate Sprint</button>
+                    <button class="btn button-color w-100 mb-2" (click)="clearStroy()" type="button">Clear story</button>
+                    <button class="btn button-color w-100 mb-2" (click)="clearSprint()" type="button">Clear Sprints</button>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
