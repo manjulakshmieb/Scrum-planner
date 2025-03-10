@@ -60,42 +60,42 @@ export class SprintFormComponent {
     }
   }
 
-  private selectOptimalStories(stories: any[], capacity: number): any[] {
-    this.totelStoryPoinsts = Math.min(...stories.map(story => story.storypoints));
-    if (capacity < this.totelStoryPoinsts) {
-      return [];
-    }
-    const dp: number[][] = Array(stories.length + 1)
-      .fill(null)
-      .map(() => Array(capacity + 1).fill(0));
-    for (let i = 1; i <= stories.length; i++) {
-      for (let j = 0; j <= capacity; j++) {
-        const story = stories[i - 1];
-        if (story.storypoints <= j) {
-          dp[i][j] = Math.max(
-            dp[i - 1][j],                          
-            dp[i - 1][j - story.storypoints] + story.storypoints 
-          );
-        } else {
-          dp[i][j] = dp[i - 1][j];
-        }
-      }
-    
-  }
-
+ private selectOptimalStories(stories: any[], capacity: number): any[] {
+  // Convert storypoints from string to number
+  const storiesWithNumericPoints = stories.map(story => ({
+    ...story,
+    storypoints: parseInt(story.storypoints, 10)
+  }));
+  
+  // Sort stories by storypoints in descending order (largest first)
+  const sortedStories = [...storiesWithNumericPoints].sort((a, b) => 
+    b.storypoints - a.storypoints
+  );
+  
+  let remainingCapacity = capacity;
   const selectedStories: any[] = [];
-    let remainingCapacity = capacity;
-    
-    for (let i = stories.length; i > 0 && remainingCapacity > 0; i--) {
-      // If this story was included in the optimal solution
-      if (dp[i][remainingCapacity] !== dp[i - 1][remainingCapacity]) {
-        const story = stories[i - 1];
-        selectedStories.push(story);
-        remainingCapacity -= story.storypoints;
-      }
+  
+  // First pass: Add large stories that fit
+  for (const story of sortedStories) {
+    if (story.storypoints <= remainingCapacity) {
+      // Find original story object
+      const originalStory = stories.find(s => s.storyname === story.storyname);
+      selectedStories.push(originalStory);
+      remainingCapacity -= story.storypoints;
     }
-    return selectedStories;
   }
+  
+  // Sort selected stories by storypoints (to match expected output order)
+  return selectedStories.sort((a, b) => 
+    parseInt(b.storypoints, 10) - parseInt(a.storypoints, 10)
+  );
+}
+  
+  
+  
+  
+  
+  
 
   clearStroy(){
     localStorage.removeItem('storyDataSave');
