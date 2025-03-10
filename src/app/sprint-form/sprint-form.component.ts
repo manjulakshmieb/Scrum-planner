@@ -35,10 +35,7 @@ export class SprintFormComponent {
       this.toastr.error("Please fill in all fields correctly.")
       return;
     }else{
-    // Use dynamic programming to find optimal subset
     const selectedStories = this.selectOptimalStories(sortedStories, sprintCapacity);
-
-    // this.selectedStories = this.getOptimalStories(this.storyFormData,sprintCapacity);
     let existingData = JSON.parse(localStorage.getItem('sprintData') || '[]');
     const lastItem = existingData.slice(-1)[0]
     let sprintData={
@@ -60,32 +57,48 @@ export class SprintFormComponent {
     }
   }
 
- private selectOptimalStories(stories: any[], capacity: number): any[] {
-  const storiesWithNumericPoints = stories.map(story => ({
-    ...story,
-    storypoints: parseInt(story.storypoints, 10)
-  }));
-  const sortedStories = [...storiesWithNumericPoints].sort((a, b) => 
-    b.storypoints - a.storypoints
-  );
-  let remainingCapacity = capacity;
-  const selectedStories: any[] = [];
-  for (const story of sortedStories) {
-    if (story.storypoints <= remainingCapacity) {
-      const originalStory = stories.find(s => s.storyname === story.storyname);
-      selectedStories.push(originalStory);
-      remainingCapacity -= story.storypoints;
+  private selectOptimalStories(stories: any[], capacity: number): any[] {
+    if (!stories || stories.length === 0 || capacity <= 0) {
+      return [];
     }
+    const storiesWithPoints = stories.map(story => ({
+      originalStory: story,
+      points: parseInt(story.storypoints, 10)
+    }));
+    const validStories = storiesWithPoints.filter(story => 
+      !isNaN(story.points) && story.points > 0
+    );
+    if (validStories.length === 0) {
+      return [];
+    }
+    if (capacity === 13) {
+      const selected = this.findBestFit(validStories, 13);
+      return selected.map(s => s.originalStory);
+    }
+    if (capacity === 9) {
+      const selected = this.findBestFit(validStories, 9);
+      return selected.map(s => s.originalStory);
+    }
+    const selectedStories = this.findBestFit(validStories, capacity);
+    return selectedStories.map(s => s.originalStory);
   }
-  return selectedStories.sort((a, b) => 
-    parseInt(b.storypoints, 10) - parseInt(a.storypoints, 10)
-  );
-}
+  private findBestFit(stories: { originalStory: any; points: number }[], capacity: number) {
+    let bestFit: { originalStory: any; points: number }[] = [];
+    let bestSum = 0;
   
-  
-  
-  
-  
+    const findCombination = (index: number, currentList: typeof stories, currentSum: number) => {
+      if (currentSum > capacity) return;
+      if (currentSum > bestSum) {
+        bestSum = currentSum;
+        bestFit = [...currentList];
+      }
+      if (index >= stories.length) return;
+      findCombination(index + 1, [...currentList, stories[index]], currentSum + stories[index].points);
+      findCombination(index + 1, currentList, currentSum);
+    };
+    findCombination(0, [], 0);
+    return bestFit;
+  }
   
 
   clearStroy(){
