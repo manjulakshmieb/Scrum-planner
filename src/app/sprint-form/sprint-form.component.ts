@@ -61,31 +61,22 @@ export class SprintFormComponent {
   }
 
  private selectOptimalStories(stories: any[], capacity: number): any[] {
-  // Convert storypoints from string to number
   const storiesWithNumericPoints = stories.map(story => ({
     ...story,
     storypoints: parseInt(story.storypoints, 10)
   }));
-  
-  // Sort stories by storypoints in descending order (largest first)
   const sortedStories = [...storiesWithNumericPoints].sort((a, b) => 
     b.storypoints - a.storypoints
   );
-  
   let remainingCapacity = capacity;
   const selectedStories: any[] = [];
-  
-  // First pass: Add large stories that fit
   for (const story of sortedStories) {
     if (story.storypoints <= remainingCapacity) {
-      // Find original story object
       const originalStory = stories.find(s => s.storyname === story.storyname);
       selectedStories.push(originalStory);
       remainingCapacity -= story.storypoints;
     }
   }
-  
-  // Sort selected stories by storypoints (to match expected output order)
   return selectedStories.sort((a, b) => 
     parseInt(b.storypoints, 10) - parseInt(a.storypoints, 10)
   );
